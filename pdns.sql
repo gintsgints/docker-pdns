@@ -135,6 +135,28 @@ begin
 end
 $$ language plpgsql;
 
+-- NAPTR records
+create or replace function create_a( _domain text, _host text, _ipaddr text) returns boolean as $$
+declare
+  _domain_id integer;
+begin
+  perform delete_a(_domain,_host,_ipaddr);
+  select into _domain_id id from domains where name = _domain;
+  insert into records(id,domain_id, name,type, content, ttl) values (nextval('record_id_seq'), _domain_id, _host || '.' ||  _domain, 'NAPTR', _ipaddr, 3600);
+  return found;
+end
+$$ language plpgsql;
+
+create or replace function delete_a( _domain text, _host text, _ipaddr text) returns boolean as $$
+declare
+  _domain_id integer;
+begin
+  select into _domain_id id from domains where name = _domain;
+  delete from records where domain_id = _domain_id and name = _host || '.' || _domain and content = _ipaddr and type = 'NAPTR';
+  return found;
+end
+$$ language plpgsql;
+
 -- A records
 create or replace function create_a( _domain text, _host text, _ipaddr text) returns boolean as $$
 declare
