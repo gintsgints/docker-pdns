@@ -136,7 +136,7 @@ end
 $$ language plpgsql;
 
 -- NAPTR records
-create or replace function create_a( _domain text, _host text, _ipaddr text) returns boolean as $$
+create or replace function create_naptr( _domain text, _host text, _ipaddr text) returns boolean as $$
 declare
   _domain_id integer;
 begin
@@ -147,7 +147,7 @@ begin
 end
 $$ language plpgsql;
 
-create or replace function delete_a( _domain text, _host text, _ipaddr text) returns boolean as $$
+create or replace function delete_naptr( _domain text, _host text, _ipaddr text) returns boolean as $$
 declare
   _domain_id integer;
 begin
